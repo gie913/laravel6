@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'movies'], function () {
     Route::get('toprated/{page}', 'MoviesController@toprated');
-    Route::get('upcoming', 'MoviesController@upcoming');
-    Route::get('popular', 'MoviesController@popular');
+    Route::get('upcoming/{page}', 'MoviesController@upcoming');
+    Route::get('nowplaying/{page}', 'MoviesController@nowplaying');
+    Route::get('popular/{page}', 'MoviesController@popular');
+
 });
