@@ -23,8 +23,13 @@ class MoviesController extends BaseController
         $pagenumber = isset($page)?$page:1;
         $target_api = env('API_MOVIE')."3/movie/top_rated?api_key=".env('API_MOVIE_KEY')."&language=en-US&page=".$pagenumber;
         $data = $this->guzzle($target_api);
-        echo $data;
-
+        $decode = json_decode($data);
+        $current_page = $decode->page;
+        $total_pages = $decode->total_pages;
+        $total_results= $decode->total_results;
+        $results = $decode->results;
+        $genres = $this->genres();
+        return view('TopRatedMovie', compact('current_page','total_pages','total_results','results','genres'));
     }
 
     public function upcoming($page)
@@ -32,7 +37,13 @@ class MoviesController extends BaseController
         $pagenumber = isset($page)?$page:1;
         $target_api = env('API_MOVIE')."3/movie/upcoming?api_key=".env('API_MOVIE_KEY')."&language=en-US&page=".$pagenumber;
         $data = $this->guzzle($target_api);
-        echo $data;
+        $decode = json_decode($data);
+        $current_page = $decode->page;
+        $total_pages = $decode->total_pages;
+        $total_results= $decode->total_results;
+        $results = $decode->results;
+        $genres = $this->genres();
+        return view('UpcomingMovie', compact('current_page','total_pages','total_results','results','genres'));
     }
 
     public function nowplaying($page)
@@ -40,7 +51,13 @@ class MoviesController extends BaseController
         $pagenumber = isset($page)?$page:1;
         $target_api = env('API_MOVIE')."3/movie/now_playing?api_key=".env('API_MOVIE_KEY')."&language=en-US&page=".$pagenumber;
         $data = $this->guzzle($target_api);
-        echo $data;
+        $decode = json_decode($data);
+        $current_page = $decode->page;
+        $total_pages = $decode->total_pages;
+        $total_results= $decode->total_results;
+        $results = $decode->results;
+        $genres = $this->genres();
+        return view('NowPlayingMovie', compact('current_page','total_pages','total_results','results','genres'));
     }
 
     public function popular($page)
@@ -48,7 +65,13 @@ class MoviesController extends BaseController
         $pagenumber = isset($page)?$page:1;
         $target_api = env('API_MOVIE')."3/movie/popular?api_key=".env('API_MOVIE_KEY')."&language=en-US&page=".$pagenumber;
         $data = $this->guzzle($target_api);
-        echo $data;
+        $decode = json_decode($data);
+        $current_page = $decode->page;
+        $total_pages = $decode->total_pages;
+        $total_results= $decode->total_results;
+        $results = $decode->results;
+        $genres = $this->genres();
+        return view('PopularMovie', compact('current_page','total_pages','total_results','results','genres'));
     }
 
     public function guzzle($url)
@@ -58,6 +81,18 @@ class MoviesController extends BaseController
         return $res->getBody();
     }
 
+    private function genres()
+    {
+        $target_api = env('API_MOVIE')."3/genre/movie/list?api_key=".env('API_MOVIE_KEY')."&language=en-US";
+        $data = $this->guzzle($target_api);
+        $decode = json_decode($data);
+        $list_genre = [];
+        foreach($decode->genres as $genre)
+        {
+            $list_genre[$genre->id] = $genre->name;
+        }
+        return $list_genre;
+    }
 
 
 }

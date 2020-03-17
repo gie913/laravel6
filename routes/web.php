@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+Route::group(['prefix' => 'movies'], function () {
+    Route::get('toprated/{page}', 'MoviesController@toprated');
+    Route::get('upcoming/{page}', 'MoviesController@upcoming');
+    Route::get('nowplaying/{page}', 'MoviesController@nowplaying');
+    Route::get('popular/{page}', 'MoviesController@popular');
+});
